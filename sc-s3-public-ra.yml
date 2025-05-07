@@ -7,10 +7,24 @@ Resources:
     Type: AWS::S3::Bucket
     DeletionPolicy: Delete
     Properties:
-      AccessControl: PublicRead
-      Tags:
-        - Key: Name
-          Value: mah-buckt-pubra-whtx6
+      BucketName: mah-buckt-pubra-whtx6
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+
+  MyBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Sub "${S3Bucket.Arn}/*"
 
 Outputs:
   BucketName:
